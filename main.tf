@@ -30,7 +30,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_route_table" "RT" {
     vpc_id = aws_vpc.myvpc.id
 
-    reoute {
+    route {
         cidr_block = "0.0.0.0/0"
         gateway_id = aws_internet_gateway.igw.id
     }
@@ -67,7 +67,7 @@ resource "aws_security_group" "web5g"{
 
     }
 
-    tags{
+    tags = {
         Name = "Web-sg"
     }
 }
