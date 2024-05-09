@@ -9,7 +9,7 @@ variable "cidr" {
 
 resource "aws_key_pair" "example" {
     key_name = "terraform-demo-akki"
-    public_key = file("~/workspaces/terraform_project_akshat/id_rsa.pub.pub")
+    public_key = file("~/workspaces/terraform_project_akshat/id_rsa.pub")
 }
 
 resource "aws_vpc" "myvpc"{
