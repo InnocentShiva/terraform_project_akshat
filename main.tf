@@ -129,7 +129,7 @@ data "null_data_source" "flask_installed" {
   # Execute a local shell command to check if Flask is installed.
   # Adjust the command as needed depending on your environment.
   # This is an example for a Linux-based environment.
-  provisioner "local-exec" {
+  provisoner "local-exec" {
     command = "python3 -c 'import flask'"
   }
 }
