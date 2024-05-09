@@ -92,6 +92,11 @@ resource "aws_instance" "server" {
         destination = "/home/ubuntu/app.py"
     }
 
+    provisioner "file"{
+        source = "run_application.sh"
+        destination = "/home/ubuntu/run_application.sh"
+    }
+
     provisioner "remote-exec"{
         inline = [
             "echo 'Hello from the remote instance'",
@@ -115,10 +120,7 @@ resource "null_resource" "example" {
   # Define a local-exec provisioner block.
   provisioner "local-exec" {
     # Only execute the Python application if Flask is installed.
-    when = data.null_data_source.flask_installed.result ? "create" : "destroy"
-    
-    # Command to be executed locally.
-    command = "sudo python3 app.py &"
+    command = "bash -c './run_application.sh'"
   }
 }
 
@@ -128,7 +130,7 @@ data "null_data_source" "flask_installed" {
   # Adjust the command as needed depending on your environment.
   # This is an example for a Linux-based environment.
   provisioner "local-exec" {
-    command = "python -c 'import flask'"
+    command = "python3 -c 'import flask'"
   }
 }
 
