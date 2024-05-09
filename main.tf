@@ -112,10 +112,10 @@ resource "null_resource" "example" {
   # but can be used to run provisioners like local-exec.
 
   # You can define triggers here to force the provisioner to run when certain conditions change.
-  triggers = {
+  #triggers = {
     # Trigger the provisioner when the existence of Flask is changed.
-    flask_installed = data.null_data_source.flask_installed.result
-  }
+  #  flask_installed = data.null_data_source.flask_installed.result
+  #}
 
   # Define a local-exec provisioner block.
   provisioner "local-exec" {
