@@ -99,12 +99,37 @@ resource "aws_instance" "server" {
             "sudo apt-get install -y python3-pip",
             "cd /home/ubuntu",
             "sudo pip3 install flask",
-            "sudo python3 app.py &",
         ]
     }
+}
+resource "null_resource" "example" {
+  # This is a null resource, which doesn't create any infrastructure,
+  # but can be used to run provisioners like local-exec.
 
+  # You can define triggers here to force the provisioner to run when certain conditions change.
+  triggers = {
+    # Trigger the provisioner when the existence of Flask is changed.
+    flask_installed = data.null_data_source.flask_installed.result
+  }
 
+  # Define a local-exec provisioner block.
+  provisioner "local-exec" {
+    # Only execute the Python application if Flask is installed.
+    when = data.null_data_source.flask_installed.result ? "create" : "destroy"
+    
+    # Command to be executed locally.
+    command = "sudo python3 app.py &"
+  }
+}
 
+# Data source to check if Flask is installed.
+data "null_data_source" "flask_installed" {
+  # Execute a local shell command to check if Flask is installed.
+  # Adjust the command as needed depending on your environment.
+  # This is an example for a Linux-based environment.
+  provisioner "local-exec" {
+    command = "python -c 'import flask'"
+  }
 }
 
 
