@@ -120,18 +120,23 @@ resource "null_resource" "example" {
   # Define a local-exec provisioner block.
   provisioner "local-exec" {
     # Only execute the Python application if Flask is installed.
-    command = "bash -c './run_application.sh'"
+    
+    # command = "bash -c './run_application.sh'"
+
+     # Execute a script to check if Flask is installed with up to 5 attempts.
+    command = <<-EOT
+      attempt=0
+      while [ $attempt -lt 5 ]; do
+        if sudo python3 -c 'import flask' &> /dev/null; then
+          echo "Flask is installed"
+          command = "sudo python3 app.py &"
+          break
+        else
+          echo "Flask is not installed. Attempt $((attempt + 1))"
+          sleep 10  # Pause for 10 seconds between attempts
+          attempt=$((attempt + 1))
+        fi
+      done
+    EOT
   }
 }
-
-# Data source to check if Flask is installed.
-data "null_data_source" "flask_installed" {
-  # Execute a local shell command to check if Flask is installed.
-  # Adjust the command as needed depending on your environment.
-  # This is an example for a Linux-based environment.
-  provisoner "local-exec" {
-    command = "python3 -c 'import flask'"
-  }
-}
-
-
